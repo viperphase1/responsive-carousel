@@ -1,0 +1,187 @@
+<html>
+<head>
+<style>
+body {
+	margin:0px;
+	overflow:hidden;
+}
+.twit-container {
+	display:flex;
+	justify-content:center;
+}
+#twit-window {
+	width: 1000px;
+  height: auto;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.twit-tile {
+	height: 200px;
+  display: inline-block;
+  width: 300px;
+  margin: 15px;
+  border: 2px dashed grey;
+  box-sizing:border-box;
+}
+.button-area {
+	display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100px;
+  text-align: center;
+  font-size: 50px;
+}
+.button-area i {
+	cursor:pointer;
+}
+@media screen and (max-width:1200px) {
+	#twit-window {
+		width:650px;
+	}
+	.twit-tile {
+		margin:15px 12.5px;
+	}
+}
+@media screen and (max-width:850px) {
+	#twit-window {
+		width:350px;
+	}
+	.twit-tile {
+		width:350px;
+		margin:15px 0px;
+	}
+}
+@media screen and (max-width:550px) {
+	.button-area {
+		width:0px;
+		overflow:visible;
+	}
+	#arrow-left {
+		margin-right:-15px;
+	}
+	#arrow-right {
+		margin-left:-15px;
+	}
+	#twit-window {
+		width:300px;
+	}
+	.twit-tile {
+		width:300px;
+	}
+}
+</style>
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
+</head>
+<body>
+<div class="twit-container">
+  <div class="button-area">
+  	<i id="arrow-left" style="display:none" class="fa fa-arrow-left" onclick="slideLeft()"></i>
+  </div>
+	<div id="twit-window">
+		<div id="twit-tile-1" style="display: none;" class='twit-tile'></div>
+		<div id="twit-tile-2" style="display: none;" class='twit-tile'></div>
+		<div id="twit-tile-3" style="display: none;" class='twit-tile'></div>
+		<div id="twit-tile-4" style="display: none;" class='twit-tile'></div>
+		<div id="twit-tile-5" style="display: none;" class='twit-tile'></div>
+		<div id="twit-tile-6" style="display: none;" class='twit-tile'></div>
+		<div id="twit-tile-7" style="display: none;" class='twit-tile'></div>
+		<div id="twit-tile-8" style="display: none;" class='twit-tile'></div>
+		<div id="twit-tile-9" style="display: none;" class='twit-tile'></div>
+		<div id="twit-tile-10" style="display: none;" class='twit-tile'></div>
+	</div>
+	<div class="button-area">
+  	<i id="arrow-right" class="fa fa-arrow-right" onclick="slideRight()"></i>
+  </div>
+</div>
+<script>
+  var index = 0;
+  var numTiles;
+  var canFit_copy;
+  function renderTiles() {
+  	var canFit = Math.floor($("#twit-window").width() / $("#twit-tile-1").width());
+  	if(canFit_copy < canFit) {
+  		index = (index == 0) ? 0 : index-1;
+  	}
+  	canFit_copy = canFit;
+    var tiles = document.getElementsByClassName("twit-tile");
+    numTiles = tiles.length;
+    if(canFit >= numTiles) {
+    	$("#arrow-left").hide();
+    	$("#arrow-right").hide();
+    }
+    else {
+    	if(index+canFit < numTiles) {
+    		$("#arrow-right").show();
+    	}
+    	else {
+    		$("#arrow-right").hide();
+    	}
+    	if(index > 0) {
+    		$("#arrow-left").show();
+    	}
+    	else {
+    		$("#arrow-left").hide();
+    	}
+    }
+    for(var i=0; i<tiles.length; i++) {
+    	if(i >= index && i < index+canFit) $(tiles[i]).show();
+    	else $(tiles[i]).hide();
+    }
+  }
+  $(document).ready(function() {
+  	renderTiles();
+  });
+  $(window).resize(function() {
+  	renderTiles();
+  })
+  function slideRight() {
+  	var canFit = Math.floor($("#twit-window").width() / $("#twit-tile-1").width());
+  	
+  	for(var i=index+canFit; i<index+2*canFit; i++) {
+    	$("#twit-tile-"+(i+1)).show();
+    }
+    var first = document.getElementById("twit-tile-"+(index+1));
+    var numLeft = numTiles-(index+canFit);
+    $(first).animate(
+    	{marginLeft:$(first).width()*Math.min(canFit,numLeft)*(-1)},
+    	{
+    		complete:function() {
+					index+=canFit;
+			  	if( (index+canFit) > (numTiles-1) ) {
+			  		index = numTiles - canFit;
+			    }
+  	      renderTiles();
+  	      $(first).css('margin-left','0px');
+    	  }
+      }
+    	);
+  }
+  function slideLeft() {
+  	var canFit = Math.floor($("#twit-window").width() / $("#twit-tile-1").width());
+  	var min = Math.min(canFit,index);
+  	var first = document.getElementById("twit-tile-"+(index-min+1));
+  	var marginLeft = (-1)*$("#twit-tile-"+index).width()*min;
+  	$(first).css('margin-left',marginLeft+"px");
+
+  	for(var i=index-min; i<index; i++) {
+    	$("#twit-tile-"+(i+1)).show();
+    }
+    
+    $(first).animate(
+    	{marginLeft:0},
+    	{
+    		complete: function() {
+    			index-=canFit;
+  	      if(index < 1) {
+  		      index = 0;
+  	      }
+  	      renderTiles();
+    		}
+    	}
+    	);
+    	
+  }
+</script>
+</body>
+</html>
