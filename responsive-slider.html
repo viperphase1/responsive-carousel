@@ -11,25 +11,25 @@ body {
 }
 #twit-window {
 	width: 1000px;
-  height: auto;
-  white-space: nowrap;
-  overflow: hidden;
+  	height: auto;
+  	white-space: nowrap;
+  	overflow: hidden;
 }
 .twit-tile {
 	height: 200px;
-  display: inline-block;
-  width: 300px;
-  margin: 15px;
-  border: 2px dashed grey;
-  box-sizing:border-box;
+  	display: inline-block;
+  	width: 300px;
+  	margin: 15px;
+  	border: 2px dashed grey;
+  	box-sizing:border-box;
 }
 .button-area {
 	display: flex;
-  flex-direction: column;
-  justify-content: center;
-  width: 100px;
-  text-align: center;
-  font-size: 50px;
+  	flex-direction: column;
+  	justify-content: center;
+  	width: 100px;
+  	text-align: center;
+  	font-size: 50px;
 }
 .button-area i {
 	cursor:pointer;
@@ -136,7 +136,12 @@ body {
   	renderTiles();
   })
   function slideRight() {
-  	var canFit = Math.floor($("#twit-window").width() / $("#twit-tile-1").width());
+  	var tile = document.getElementById("twit-tile-1");
+    
+  	var canFit = Math.floor($("#twit-window").width() / $(tile).width());
+  	
+  	var style = tile.currentStyle || window.getComputedStyle(tile);
+  	var trueMarginLeft = style.marginLeft;
   	
   	for(var i=index+canFit; i<index+2*canFit; i++) {
     	$("#twit-tile-"+(i+1)).show();
@@ -152,35 +157,40 @@ body {
 			  		index = numTiles - canFit;
 			    }
   	      renderTiles();
-  	      $(first).css('margin-left','0px');
+  	      first.style.marginLeft = '';
     	  }
       }
     	);
   }
   function slideLeft() {
-  	var canFit = Math.floor($("#twit-window").width() / $("#twit-tile-1").width());
+  	var tile = document.getElementById("twit-tile-1");
+    
+  	var canFit = Math.floor($("#twit-window").width() / $(tile).width());
+  	
+  	var style = tile.currentStyle || window.getComputedStyle(tile);
+  	var trueMarginLeft = style.marginLeft;
+  	
   	var min = Math.min(canFit,index);
   	var first = document.getElementById("twit-tile-"+(index-min+1));
   	var marginLeft = (-1)*$("#twit-tile-"+index).width()*min;
   	$(first).css('margin-left',marginLeft+"px");
-
   	for(var i=index-min; i<index; i++) {
     	$("#twit-tile-"+(i+1)).show();
     }
     
     $(first).animate(
-    	{marginLeft:0},
+    	{marginLeft:trueMarginLeft},
     	{
-    		complete: function() {
-    			index-=canFit;
-  	      if(index < 1) {
-  		      index = 0;
-  	      }
-  	      renderTiles();
-    		}
+		complete: function() {
+		    first.style.marginLeft = '';
+			index-=canFit;
+		    if(index < 1) {
+			    index = 0;
+		    }
+		    renderTiles();
+		}
     	}
-    	);
-    	
+    );
   }
 </script>
 </body>
