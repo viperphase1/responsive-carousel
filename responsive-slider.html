@@ -1,5 +1,6 @@
 <html>
 <head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
 body {
 	margin:0px;
@@ -61,6 +62,9 @@ body {
 	}
 }
 @media screen and (max-width:450px) {
+    .button-area {
+        width:30px;
+    }
 	#twit-window {
 		flex:1;
 	}
@@ -79,15 +83,15 @@ body {
   </div>
 	<div id="twit-window">
 		<div id="twit-tile-1" style="display: none;" class='twit-tile'><div class="twit-tile-inner"><div style="text-align:center"><h3>Try resizing the browser window</h3></div></div></div>
-		<div id="twit-tile-2" style="display: none;" class='twit-tile'><div class="twit-tile-inner"></div></div>
-		<div id="twit-tile-3" style="display: none;" class='twit-tile'><div class="twit-tile-inner"></div></div>
-		<div id="twit-tile-4" style="display: none;" class='twit-tile'><div class="twit-tile-inner"></div></div>
-		<div id="twit-tile-5" style="display: none;" class='twit-tile'><div class="twit-tile-inner"></div></div>
-		<div id="twit-tile-6" style="display: none;" class='twit-tile'><div class="twit-tile-inner"></div></div>
-		<div id="twit-tile-7" style="display: none;" class='twit-tile'><div class="twit-tile-inner"></div></div>
-		<div id="twit-tile-8" style="display: none;" class='twit-tile'><div class="twit-tile-inner"></div></div>
-		<div id="twit-tile-9" style="display: none;" class='twit-tile'><div class="twit-tile-inner"></div></div>
-		<div id="twit-tile-10" style="display: none;" class='twit-tile'><div class="twit-tile-inner"></div></div>
+		<div id="twit-tile-2" style="display: none;" class='twit-tile'><div class="twit-tile-inner"><div style="text-align:center"><h3>This is tile 2</h3></div></div></div>
+		<div id="twit-tile-3" style="display: none;" class='twit-tile'><div class="twit-tile-inner"><div style="text-align:center"><h3>This is tile 3</h3></div></div></div>
+		<div id="twit-tile-4" style="display: none;" class='twit-tile'><div class="twit-tile-inner"><div style="text-align:center"><h3>This is tile 4</h3></div></div></div>
+		<div id="twit-tile-5" style="display: none;" class='twit-tile'><div class="twit-tile-inner"><div style="text-align:center"><h3>This is tile 5</h3></div></div></div>
+		<div id="twit-tile-6" style="display: none;" class='twit-tile'><div class="twit-tile-inner"><div style="text-align:center"><h3>This is tile 6</h3></div></div></div>
+		<div id="twit-tile-7" style="display: none;" class='twit-tile'><div class="twit-tile-inner"><div style="text-align:center"><h3>This is tile 7</h3></div></div></div>
+		<div id="twit-tile-8" style="display: none;" class='twit-tile'><div class="twit-tile-inner"><div style="text-align:center"><h3>This is tile 8</h3></div></div></div>
+		<div id="twit-tile-9" style="display: none;" class='twit-tile'><div class="twit-tile-inner"><div style="text-align:center"><h3>This is tile 9</h3></div></div></div>
+		<div id="twit-tile-10" style="display: none;" class='twit-tile'><div class="twit-tile-inner"><div style="text-align:center"><h3>This is tile 10</h3></div></div></div>
 	</div>
 	<div class="button-area">
   	<i id="arrow-right" class="fa fa-angle-right" onclick="slideRight()"></i>
@@ -147,7 +151,6 @@ body {
     }
     var first = document.getElementById("twit-tile-"+(index+1));
     var numLeft = numTiles-(index+canFit);
-    console.log($(first).outerWidth()*Math.min(canFit,numLeft)*(-1));
     $(first).animate(
     	{marginLeft:$(first).outerWidth()*Math.min(canFit,numLeft)*(-1)},
     	{
@@ -173,7 +176,6 @@ body {
   	var min = Math.min(canFit,index);
   	var first = document.getElementById("twit-tile-"+(index-min+1));
   	var marginLeft = (-1)*$("#twit-window").width();
-  	console.log(marginLeft);
   	$(first).css('margin-left',marginLeft+"px");
   	for(var i=index-min; i<index; i++) {
     	$("#twit-tile-"+(i+1)).show();
