@@ -13,7 +13,7 @@ body {
 	vertical-align:top;
 }
 #twit-window {
-  width: 1000px;
+  width: 1050px;
   height: auto;
   white-space: nowrap;
   overflow: hidden;
@@ -21,17 +21,22 @@ body {
 .twit-tile {
   height: 200px;
   display: inline-block;
-  width: 300px;
-  margin: 15px;
-  border: 2px dashed grey;
+  width: 350px;
+  padding: 15px;
   box-sizing:border-box;
   white-space:normal;
+}
+.twit-tile-inner {
+      border: 2px dashed grey;
+      height:100%;
+      width:100%;
+      box-sizing:border-box;
 }
 .button-area {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  width: 100px;
+  width: 50px;
   text-align: center;
   font-size: 50px;
 }
@@ -40,10 +45,10 @@ body {
 }
 @media screen and (max-width:1200px) {
 	#twit-window {
-		width:650px;
+		width:700px;
 	}
 	.twit-tile {
-		margin:15px 12.5px;
+		padding:15px 12.5px;
 	}
 }
 @media screen and (max-width:850px) {
@@ -52,13 +57,10 @@ body {
 	}
 	.twit-tile {
 		width:350px;
-		margin:15px 0px;
+		padding:15px 0px;
 	}
 }
-@media screen and (max-width:550px) {
-    .button-area {
-        width:50px;
-    }
+@media screen and (max-width:450px) {
 	#twit-window {
 		flex:1;
 	}
@@ -76,16 +78,16 @@ body {
   	<i id="arrow-left" style="display:none" class="fa fa-angle-left" onclick="slideLeft()"></i>
   </div>
 	<div id="twit-window">
-		<div id="twit-tile-1" style="display: none;" class='twit-tile'><div style="text-align:center"><h3>Try resizing the browser window</h3></div></div>
-		<div id="twit-tile-2" style="display: none;" class='twit-tile'></div>
-		<div id="twit-tile-3" style="display: none;" class='twit-tile'></div>
-		<div id="twit-tile-4" style="display: none;" class='twit-tile'></div>
-		<div id="twit-tile-5" style="display: none;" class='twit-tile'></div>
-		<div id="twit-tile-6" style="display: none;" class='twit-tile'></div>
-		<div id="twit-tile-7" style="display: none;" class='twit-tile'></div>
-		<div id="twit-tile-8" style="display: none;" class='twit-tile'></div>
-		<div id="twit-tile-9" style="display: none;" class='twit-tile'></div>
-		<div id="twit-tile-10" style="display: none;" class='twit-tile'></div>
+		<div id="twit-tile-1" style="display: none;" class='twit-tile'><div class="twit-tile-inner"><div style="text-align:center"><h3>Try resizing the browser window</h3></div></div></div>
+		<div id="twit-tile-2" style="display: none;" class='twit-tile'><div class="twit-tile-inner"></div></div>
+		<div id="twit-tile-3" style="display: none;" class='twit-tile'><div class="twit-tile-inner"></div></div>
+		<div id="twit-tile-4" style="display: none;" class='twit-tile'><div class="twit-tile-inner"></div></div>
+		<div id="twit-tile-5" style="display: none;" class='twit-tile'><div class="twit-tile-inner"></div></div>
+		<div id="twit-tile-6" style="display: none;" class='twit-tile'><div class="twit-tile-inner"></div></div>
+		<div id="twit-tile-7" style="display: none;" class='twit-tile'><div class="twit-tile-inner"></div></div>
+		<div id="twit-tile-8" style="display: none;" class='twit-tile'><div class="twit-tile-inner"></div></div>
+		<div id="twit-tile-9" style="display: none;" class='twit-tile'><div class="twit-tile-inner"></div></div>
+		<div id="twit-tile-10" style="display: none;" class='twit-tile'><div class="twit-tile-inner"></div></div>
 	</div>
 	<div class="button-area">
   	<i id="arrow-right" class="fa fa-angle-right" onclick="slideRight()"></i>
@@ -145,9 +147,9 @@ body {
     }
     var first = document.getElementById("twit-tile-"+(index+1));
     var numLeft = numTiles-(index+canFit);
-    console.log($(first).width()*Math.min(canFit,numLeft)*(-1));
+    console.log($(first).outerWidth()*Math.min(canFit,numLeft)*(-1));
     $(first).animate(
-    	{marginLeft:$(first).width()*Math.min(canFit,numLeft)*(-1)},
+    	{marginLeft:$(first).outerWidth()*Math.min(canFit,numLeft)*(-1)},
     	{
     		complete:function() {
 					index+=canFit;
@@ -170,9 +172,7 @@ body {
   	
   	var min = Math.min(canFit,index);
   	var first = document.getElementById("twit-tile-"+(index-min+1));
-  	var marginLeft;
-  	if(canFit == 1) marginLeft = (-1)*$("#twit-tile-"+(index+1)).width();
-  	else marginLeft = (-1)*$(first).width()*min;
+  	var marginLeft = (-1)*$("#twit-window").width();
   	console.log(marginLeft);
   	$(first).css('margin-left',marginLeft+"px");
   	for(var i=index-min; i<index; i++) {
