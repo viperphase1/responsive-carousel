@@ -13,26 +13,27 @@ body {
 	vertical-align:top;
 }
 #twit-window {
-	width: 1000px;
-  	height: auto;
-  	white-space: nowrap;
-  	overflow: hidden;
+  width: 1000px;
+  height: auto;
+  white-space: nowrap;
+  overflow: hidden;
 }
 .twit-tile {
-	height: 200px;
-  	display: inline-block;
-  	width: 300px;
-  	margin: 15px;
-  	border: 2px dashed grey;
-  	box-sizing:border-box;
+  height: 200px;
+  display: inline-block;
+  width: 300px;
+  margin: 15px;
+  border: 2px dashed grey;
+  box-sizing:border-box;
+  white-space:normal;
 }
 .button-area {
-	display: flex;
-  	flex-direction: column;
-  	justify-content: center;
-  	width: 100px;
-  	text-align: center;
-  	font-size: 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100px;
+  text-align: center;
+  font-size: 50px;
 }
 .button-area i {
 	cursor:pointer;
@@ -55,21 +56,14 @@ body {
 	}
 }
 @media screen and (max-width:550px) {
-	.button-area {
-		width:0px;
-		overflow:visible;
-	}
-	#arrow-left {
-		margin-right:-15px;
-	}
-	#arrow-right {
-		margin-left:-15px;
-	}
+    .button-area {
+        width:50px;
+    }
 	#twit-window {
-		width:300px;
+		flex:1;
 	}
 	.twit-tile {
-		width:300px;
+		width:100%;
 	}
 }
 </style>
@@ -79,10 +73,10 @@ body {
 <body>
 <div class="twit-container">
   <div class="button-area">
-  	<i id="arrow-left" style="display:none" class="fa fa-arrow-left" onclick="slideLeft()"></i>
+  	<i id="arrow-left" style="display:none" class="fa fa-angle-left" onclick="slideLeft()"></i>
   </div>
 	<div id="twit-window">
-		<div id="twit-tile-1" style="display: none;" class='twit-tile'></div>
+		<div id="twit-tile-1" style="display: none;" class='twit-tile'><div style="text-align:center"><h3>Try resizing the browser window</h3></div></div>
 		<div id="twit-tile-2" style="display: none;" class='twit-tile'></div>
 		<div id="twit-tile-3" style="display: none;" class='twit-tile'></div>
 		<div id="twit-tile-4" style="display: none;" class='twit-tile'></div>
@@ -94,7 +88,7 @@ body {
 		<div id="twit-tile-10" style="display: none;" class='twit-tile'></div>
 	</div>
 	<div class="button-area">
-  	<i id="arrow-right" class="fa fa-arrow-right" onclick="slideRight()"></i>
+  	<i id="arrow-right" class="fa fa-angle-right" onclick="slideRight()"></i>
   </div>
 </div>
 <script>
@@ -102,7 +96,7 @@ body {
   var numTiles;
   var canFit_copy;
   function renderTiles() {
-  	var canFit = Math.floor($("#twit-window").width() / $("#twit-tile-1").width());
+  	var canFit = Math.floor($("#twit-window").width() / $("#twit-tile-1").width()) || 1;
   	if(canFit_copy < canFit) {
   		index = (index == 0) ? 0 : index-1;
   	}
@@ -141,7 +135,7 @@ body {
   function slideRight() {
   	var tile = document.getElementById("twit-tile-1");
     
-  	var canFit = Math.floor($("#twit-window").width() / $(tile).width());
+  	var canFit = Math.floor($("#twit-window").width() / $(tile).width()) || 1;
   	
   	var style = tile.currentStyle || window.getComputedStyle(tile);
   	var trueMarginLeft = style.marginLeft;
@@ -151,6 +145,7 @@ body {
     }
     var first = document.getElementById("twit-tile-"+(index+1));
     var numLeft = numTiles-(index+canFit);
+    console.log($(first).width()*Math.min(canFit,numLeft)*(-1));
     $(first).animate(
     	{marginLeft:$(first).width()*Math.min(canFit,numLeft)*(-1)},
     	{
@@ -163,19 +158,22 @@ body {
   	      first.style.marginLeft = '';
     	  }
       }
-    	);
+    );
   }
   function slideLeft() {
   	var tile = document.getElementById("twit-tile-1");
     
-  	var canFit = Math.floor($("#twit-window").width() / $(tile).width());
+  	var canFit = Math.floor($("#twit-window").width() / $(tile).width()) || 1;
   	
   	var style = tile.currentStyle || window.getComputedStyle(tile);
   	var trueMarginLeft = style.marginLeft;
   	
   	var min = Math.min(canFit,index);
   	var first = document.getElementById("twit-tile-"+(index-min+1));
-  	var marginLeft = (-1)*$("#twit-tile-"+index).width()*min;
+  	var marginLeft;
+  	if(canFit == 1) marginLeft = (-1)*$("#twit-tile-"+(index+1)).width();
+  	else marginLeft = (-1)*$(first).width()*min;
+  	console.log(marginLeft);
   	$(first).css('margin-left',marginLeft+"px");
   	for(var i=index-min; i<index; i++) {
     	$("#twit-tile-"+(i+1)).show();
@@ -184,14 +182,14 @@ body {
     $(first).animate(
     	{marginLeft:trueMarginLeft},
     	{
-		complete: function() {
-		    first.style.marginLeft = '';
-			index-=canFit;
-		    if(index < 1) {
-			    index = 0;
-		    }
-		    renderTiles();
-		}
+    		complete: function() {
+    		    first.style.marginLeft = '';
+    			index-=canFit;
+  	            if(index < 1) {
+  		            index = 0;
+  	            }
+  	            renderTiles();
+    		}
     	}
     );
   }
